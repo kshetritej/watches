@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;background:#0D0E0D;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#ECE9E2;text-decoration:none}
+a:hover{color:#B89B67}
+button{font-family:inherit}
+input,textarea{font-family:inherit}
+::selection{background:#3E5A37;color:#ECE9E2}
+@keyframes fabpulse{0%,100%{box-shadow:0 8px 24px rgba(0,0,0,.5),0 0 0 0 rgba(37,211,102,.55)}50%{box-shadow:0 8px 24px rgba(0,0,0,.5),0 0 0 16px rgba(37,211,102,0)}}
+@media (prefers-reduced-motion:reduce){.fabpulse{animation:none!important;box-shadow:0 8px 24px rgba(0,0,0,.5),0 0 0 2px rgba(37,211,102,.55)!important}}
+</style>
+</helmet>
+<div style="min-height:100vh;background:#0D0E0D;color:#ECE9E2;font-family:'Jost',sans-serif;font-weight:300;font-size:15px;line-height:1.6;">
+
+<sc-if value="{{ showAnn }}" hint-placeholder-val="{{ true }}">
+  <div style="background:#141614;color:#9A9C96;font-size:11px;letter-spacing:.18em;text-transform:uppercase;text-align:center;padding:9px 16px;border-bottom:1px solid rgba(236,233,226,.06);">Delivery all over Nepal · eSewa · Khalti · Cash on Delivery</div>
+</sc-if>
+
+<header style="position:sticky;top:0;z-index:40;background:rgba(13,14,13,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(236,233,226,.07);">
+  <div style="max-width:1320px;margin:0 auto;height:64px;padding:0 clamp(16px,4vw,48px);display:grid;grid-template-columns:1fr auto 1fr;align-items:center;">
+    <div style="display:flex;align-items:center;gap:28px;">
+      <sc-if value="{{ mob }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ openMenu }}" aria-label="Menu" style="background:none;border:0;color:#ECE9E2;padding:10px;margin-left:-10px;cursor:pointer;display:flex;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M3 8h18M3 16h18"></path></svg></button>
+      </sc-if>
+      <sc-if value="{{ desk }}" hint-placeholder-val="{{ true }}">
+        <nav style="display:flex;gap:28px;font-size:12px;letter-spacing:.18em;text-transform:uppercase;">
+          <a href="#" onClick="{{ goCollection }}">Collection</a>
+          <a href="#" onClick="{{ goAbout }}">About</a>
+          <a href="#" onClick="{{ goContact }}">Contact</a>
+        </nav>
+      </sc-if>
+    </div>
+    <a href="#" onClick="{{ goHome }}" style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:400;letter-spacing:.06em;white-space:nowrap;color:#ECE9E2;">Ash <span style="font-style:italic;color:#B89B67;">&amp;</span> Moss</a>
+    <div style="display:flex;justify-content:flex-end;align-items:center;gap:6px;">
+      <sc-if value="{{ desk }}" hint-placeholder-val="{{ true }}">
+        <a href="{{ waGeneral }}" target="_blank" style="display:flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.18em;text-transform:uppercase;padding:10px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.5-1.2A9 9 0 1 0 12 3z"></path><path d="M9 8.5c0 3.5 3 6.5 6.5 6.5l1-1.5-2-1-1 .8c-1-.5-2.3-1.8-2.8-2.8l.8-1-1-2-1.5 1z"></path></svg>WhatsApp</a>
+      </sc-if>
+      <button onClick="{{ openCart }}" aria-label="Cart" style="position:relative;background:none;border:0;color:#ECE9E2;padding:10px;margin-right:-10px;cursor:pointer;display:flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.18em;text-transform:uppercase;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M5 8h14l-1 12H6L5 8z"></path><path d="M9 8V6a3 3 0 0 1 6 0v2"></path></svg>
+        <span style="font-size:12px;color:#B89B67;">{{ cartCount }}</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;inset:0;z-index:60;background:#0D0E0D;display:flex;flex-direction:column;padding:20px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;height:44px;">
+      <span style="font-family:'Cormorant Garamond',serif;font-size:24px;">Ash <span style="font-style:italic;color:#B89B67;">&amp;</span> Moss</span>
+      <button onClick="{{ closeMenu }}" aria-label="Close" style="background:none;border:0;color:#ECE9E2;padding:10px;cursor:pointer;display:flex;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M5 5l14 14M19 5L5 19"></path></svg></button>
+    </div>
+    <nav style="display:flex;flex-direction:column;gap:8px;margin-top:56px;font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:300;line-height:1.2;">
+      <a href="#" onClick="{{ goHome }}">Home</a>
+      <a href="#" onClick="{{ goCollection }}">Collection</a>
+      <a href="#" onClick="{{ goAbout }}">About</a>
+      <a href="#" onClick="{{ goContact }}">Contact</a>
+    </nav>
+    <div style="margin-top:auto;display:flex;flex-direction:column;gap:12px;">
+      <a href="{{ waGeneral }}" target="_blank" style="display:flex;justify-content:center;align-items:center;gap:10px;background:#3E5A37;color:#ECE9E2;padding:17px;font-size:12px;letter-spacing:.2em;text-transform:uppercase;">Order on WhatsApp</a>
+      <div style="color:#9A9C96;font-size:13px;text-align:center;">08 New Rd, Pokhara · hello@ashandmoss.com</div>
+    </div>
+  </div>
+</sc-if>
+
+<main>
+<!-- HOME -->
+<sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+  <section style="position:relative;min-height:calc(100svh - 64px);display:flex;align-items:flex-end;overflow:hidden;background:radial-gradient(ellipse 60% 70% at 62% 42%, #2A2E28 0%, #141614 55%, #0D0E0D 100%);">
+    <img src="images/hero.jpeg" alt="Hero — watch close-up, dramatic side light" loading="eager" style="position:absolute;inset:0;width:100%;height:100%;;object-fit:cover;display:block;">
+    <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(to top, rgba(13,14,13,.92) 0%, rgba(13,14,13,.35) 40%, rgba(13,14,13,0) 70%);"></div>
+    <div style="position:relative;pointer-events:none;width:100%;max-width:1320px;margin:0 auto;padding:0 clamp(20px,5vw,64px) clamp(48px,9vh,96px);display:flex;flex-direction:column;gap:28px;">
+      <div style="font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#B89B67;">Pokhara, Nepal</div>
+      <h1 style="margin:0;font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(52px,9vw,136px);line-height:.95;letter-spacing:-.01em;max-width:10ch;text-wrap:balance;">Timeless, by nature.</h1>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;pointer-events:auto;">
+        <button onClick="{{ goCollection }}" style="background:#ECE9E2;color:#0D0E0D;border:0;padding:17px 30px;font-size:12px;font-weight:400;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;" style-hover="background:#FFFFFF;">Explore the collection</button>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding:clamp(80px,11vw,150px) 0 clamp(64px,8vw,110px);">
+    <div style="max-width:1320px;margin:0 auto;padding:0 clamp(20px,5vw,64px);display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:40px;">
+      <div data-reveal="" style="display:flex;flex-direction:column;gap:14px;">
+        <div style="font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#B89B67;">The collection</div>
+        <h2 style="margin:0;font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(36px,5vw,64px);line-height:1;">Four to begin with.</h2>
+      </div>
+      <a href="#" onClick="{{ goCollection }}" style="font-size:12px;letter-spacing:.2em;text-transform:uppercase;border-bottom:1px solid rgba(236,233,226,.3);padding-bottom:4px;">View all watches</a>
+    </div>
+    <div style="max-width:1320px;margin:0 auto;padding:0 clamp(20px,5vw,64px);display:flex;gap:clamp(16px,2vw,28px);overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding:0 clamp(20px,5vw,64px);scrollbar-width:none;">
+      <sc-for list="{{ featured }}" as="p" hint-placeholder-count="4">
+        <div data-reveal="" style="flex:1 0 min(76vw,260px);scroll-snap-align:start;display:flex;flex-direction:column;gap:16px;">
+          <div style="position:relative;aspect-ratio:4/5;overflow:hidden;background:radial-gradient(ellipse at 50% 38%, #272A26 0%, #131513 62%, #0D0E0D 100%);">
+            <img src="{{ p.img }}" alt="{{ p.name }}" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;;object-fit:cover;display:block;">
+            <div style="position:absolute;left:0;right:0;bottom:0;padding:14px;display:flex;justify-content:flex-end;pointer-events:none;">
+              <button onClick="{{ p.quick }}" style="pointer-events:auto;background:rgba(13,14,13,.72);backdrop-filter:blur(8px);color:#ECE9E2;border:1px solid rgba(236,233,226,.18);padding:10px 14px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;" style-hover="background:#ECE9E2;color:#0D0E0D;">Quick view</button>
+            </div>
+          </div>
+          <div onClick="{{ p.open }}" style="cursor:pointer;display:flex;flex-direction:column;gap:4px;">
+            <div style="font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#9A9C96;">{{ p.style }}</div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;">
+              <span style="font-family:'Cormorant Garamond',serif;font-size:25px;font-weight:400;">{{ p.name }}</span>
+              <span style="font-size:13px;letter-spacing:.04em;color:#C9C6BF;white-space:nowrap;">{{ p.priceF }}</span>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="padding:clamp(64px,9vw,130px) clamp(20px,5vw,64px);background:#111311;">
+    <div style="max-width:1320px;margin:0 auto;display:flex;flex-direction:column;gap:clamp(36px,5vw,64px);">
+      <div data-reveal="" style="display:flex;flex-direction:column;gap:14px;max-width:640px;">
+        <div style="font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#B89B67;">The details</div>
+        <h2 style="margin:0;font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(40px,6vw,80px);line-height:1;">Built to stand out.</h2>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:clamp(16px,2vw,28px);">
+        <sc-for list="{{ details }}" as="d" hint-placeholder-count="3">
+          <div data-reveal="" style="display:flex;flex-direction:column;gap:18px;">
+            <div style="position:relative;aspect-ratio:1/1;overflow:hidden;background:radial-gradient(circle at 45% 40%, #2A2E28 0%, #141614 60%, #0D0E0D 100%);">
+              <img src="{{ d.src }}" alt="{{ d.ph }}" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;;object-fit:cover;display:block;">
+            </div>
+            <div style="display:flex;gap:16px;align-items:baseline;">
+              <span style="font-family:'Cormorant Garamond',serif;font-style:italic;color:#B89B67;font-size:18px;">{{ d.n }}</span>
+              <div style="display:flex;flex-direction:column;gap:4px;">
+                <span style="font-family:'Cormorant Garamond',serif;font-size:26px;">{{ d.title }}</span>
+                <span style="color:#9A9C96;font-size:14px;max-width:34ch;">{{ d.copy }}</span>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding:clamp(80px,11vw,150px) clamp(20px,5vw,64px);">
+    <div style="max-width:1320px;margin:0 auto;display:flex;flex-direction:column;gap:clamp(36px,5vw,64px);">
+      <div data-reveal="" style="display:flex;flex-direction:column;gap:14px;align-items:center;text-align:center;">
+        <div style="font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#B89B67;">Worn well</div>
+        <h2 style="margin:0;font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(38px,5.5vw,72px);line-height:1.02;max-width:14ch;text-wrap:balance;">For every moment that matters.</h2>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:clamp(12px,1.5vw,20px);">
+        <sc-for list="{{ moments }}" as="m" hint-placeholder-count="3">
+          <div data-reveal="" style="position:relative;aspect-ratio:3/4;overflow:hidden;background:linear-gradient(180deg,#1A1C19 0%,#0F110F 100%);">
+            <img src="{{ m.src }}" alt="{{ m.ph }}" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;;object-fit:cover;display:block;">
+            <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(to top, rgba(13,14,13,.85) 0%, rgba(13,14,13,0) 50%);"></div>
+            <div style="position:absolute;left:0;right:0;bottom:0;padding:clamp(20px,2.5vw,32px);display:flex;justify-content:space-between;align-items:flex-end;gap:12px;pointer-events:none;">
+              <div style="display:flex;flex-direction:column;gap:4px;">
+                <span style="font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:300;line-height:1;">{{ m.title }}</span>
+                <span style="font-size:13px;color:#C9C6BF;">{{ m.copy }}</span>
+              </div>
+              <button onClick="{{ m.go }}" style="pointer-events:auto;background:none;border:0;border-bottom:1px solid rgba(236,233,226,.4);color:#ECE9E2;padding:0 0 4px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">Shop {{ m.style }}</button>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding:clamp(64px,9vw,130px) clamp(20px,5vw,64px);background:#111311;">
+    <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:clamp(40px,7vw,110px);align-items:center;">
+      <div data-reveal="" style="position:relative;aspect-ratio:4/5;overflow:hidden;background:linear-gradient(160deg,#1E211D 0%,#0F110F 100%);">
+        <img src="images/story.jpeg" alt="Workshop in Pokhara" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;;object-fit:cover;display:block;">
+      </div>
+      <div data-reveal="" style="display:flex;flex-direction:column;gap:24px;">
+        <div style="font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#B89B67;">Our story</div>
+        <h2 style="margin:0;font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(38px,5vw,64px);line-height:1.02;text-wrap:balance;">Crafted in Pokhara. Made to last.</h2>
+        <p style="margin:0;color:#B4B2AB;font-size:16px;max-width:44ch;text-wrap:pretty;">Ash &amp; Moss began on New Road, a short walk from the lake. Every watch is assembled, checked and finished by hand before it leaves Pokhara. We choose materials that age well and keep the design quiet, so it still feels right in twenty years.</p>
+        <a href="#" onClick="{{ goAbout }}" style="align-self:flex-start;font-size:12px;letter-spacing:.2em;text-transform:uppercase;border-bottom:1px solid rgba(236,233,226,.3);padding-bottom:4px;">Read our story</a>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding:clamp(80px,11vw,150px) 0;">
+    <div style="max-width:1320px;margin:0 auto;padding:0 clamp(20px,5vw,64px);display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:40px;">
+      <div data-reveal="" style="display:flex;flex-direction:column;gap:14px;">
+        <div style="font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#B89B67;">Film</div>
+        <h2 style="margin:0;font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(36px,5vw,64px);line-height:1;">In motion.</h2>
+      </div>
+      <a href="https://www.tiktok.com/@ashandmoss" target="_blank" style="font-size:12px;letter-spacing:.2em;text-transform:uppercase;border-bottom:1px solid rgba(236,233,226,.3);padding-bottom:4px;">More on TikTok</a>
+    </div>
+    <div style="max-width:1320px;margin:0 auto;padding:0 clamp(20px,5vw,64px);display:flex;gap:clamp(12px,1.5vw,20px);overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding:0 clamp(20px,5vw,64px);scrollbar-width:none;">
+      <sc-for list="{{ reels }}" as="r" hint-placeholder-count="3">
+        <div data-reveal="" style="flex:1 0 min(68vw,280px);scroll-snap-align:start;display:flex;flex-direction:column;gap:12px;">
+          <div style="position:relative;aspect-ratio:9/16;overflow:hidden;background:linear-gradient(180deg,#1C1F1B 0%,#0F110F 100%);">
+            <img src="{{ r.src }}" alt="{{ r.ph }}" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;;object-fit:cover;display:block;">
+            <div style="position:absolute;top:16px;left:16px;width:44px;height:44px;border-radius:50%;border:1px solid rgba(236,233,226,.5);display:flex;align-items:center;justify-content:center;pointer-events:none;background:rgba(13,14,13,.4);"><svg width="14" height="14" viewBox="0 0 24 24" fill="#ECE9E2"><path d="M7 4l13 8-13 8z"></path></svg></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;"><span>{{ r.title }}</span><span style="color:#9A9C96;">{{ r.len }}</span></div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="padding:0 clamp(20px,5vw,64px) clamp(80px,10vw,130px);">
+    <div style="max-width:1320px;margin:0 auto;display:flex;flex-direction:column;gap:28px;">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;">
+        <span style="font-family:'Cormorant Garamond',serif;font-size:clamp(26px,3vw,36px);font-style:italic;">@ashandmoss</span>
+        <a href="https://instagram.com/ashandmoss" target="_blank" style="font-size:12px;letter-spacing:.2em;text-transform:uppercase;border-bottom:1px solid rgba(236,233,226,.3);padding-bottom:4px;">Follow on Instagram</a>
+      </div>
+      <div style="display:grid;grid-template-columns:{{ igCols }};gap:6px;">
+        <sc-for list="{{ ig }}" as="g" hint-placeholder-count="6">
+          <a href="https://instagram.com/ashandmoss" target="_blank" data-reveal="" style="position:relative;aspect-ratio:1/1;overflow:hidden;background:#151715;display:block;">
+            <img src="{{ g }}" alt="Post" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;;object-fit:cover;display:block;">
+          </a>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+</sc-if>
+
+<!-- COLLECTION -->
+<sc-if value="{{ isCollection }}" hint-placeholder-val="{{ false }}">
+  <section style="padding:clamp(56px,8vw,110px) clamp(20px,5vw,64px) clamp(80px,10vw,140px);">
+    <div style="max-width:1320px;margin:0 auto;display:flex;flex-direction:column;gap:clamp(32px,4vw,48px);">
+      <div data-reveal="" style="display:flex;flex-direction:column;gap:14px;">
+        <div style="font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#B89B67;">Shop</div>
+        <h1 style="margin:0;font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(46px,7vw,96px);line-height:.95;">The Collection</h1>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:18px;padding:22px 0;border-top:1px solid rgba(236,233,226,.1);border-bottom:1px solid rgba(236,233,226,.1);">
+        <sc-for list="{{ filterGroups }}" as="fg" hint-placeholder-count="3">
+          <div style="display:flex;align-items:center;gap:16px;overflow-x:auto;scrollbar-width:none;">
+            <span style="flex:0 0 64px;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#9A9C96;">{{ fg.label }}</span>
+            <div style="display:flex;gap:8px;">
+              <sc-for list="{{ fg.chips }}" as="c" hint-placeholder-count="4">
+                <button onClick="{{ c.pick }}" style="background:{{ c.bg }};color:{{ c.fg }};border:1px solid {{ c.bd }};padding:9px 16px;font-size:12px;letter-spacing:.08em;cursor:pointer;white-space:nowrap;transition:all .2s;">{{ c.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+        <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#9A9C96;letter-spacing:.06em;">
+          <span>{{ resultLabel }}</span>
+          <button onClick="{{ clearFilters }}" style="background:none;border:0;color:#9A9C96;font-size:12px;letter-spacing:.06em;cursor:pointer;text-decoration:underline;text-underline-offset:3px;">Clear filters</button>
+        </div>
+      </div>
+      <sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
+        <div style="padding:80px 0;text-align:center;display:flex;flex-direction:column;gap:12px;align-items:center;">
+          <span style="font-family:'Cormorant Garamond',serif;font-size:32px;">Nothing matches yet.</span>
+          <span style="color:#9A9C96;">Try another strap or price, or ask us on WhatsApp.</span>
+        </div>
+      </sc-if>
+      <div style="display:grid;grid-template-columns:{{ gridCols }};gap:clamp(28px,3vw,44px) clamp(14px,2vw,28px);">
+        <sc-for list="{{ filtered }}" as="p" hint-placeholder-count="6">
+          <div data-reveal="" style="display:flex;flex-direction:column;gap:14px;">
+            <div style="position:relative;aspect-ratio:4/5;overflow:hidden;background:radial-gradient(ellipse at 50% 38%, #272A26 0%, #131513 62%, #0D0E0D 100%);">
+              <img src="{{ p.img }}" alt="{{ p.name }}" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;;object-fit:cover;display:block;">
+              <div style="position:absolute;left:0;right:0;bottom:0;padding:12px;display:flex;justify-content:flex-end;pointer-events:none;">
+                <button onClick="{{ p.quick }}" style="pointer-events:auto;background:rgba(13,14,13,.72);backdrop-filter:blur(8px);color:#ECE9E2;border:1px solid rgba(236,233,226,.18);padding:9px 12px;font-size:10px;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;" style-hover="background:#ECE9E2;color:#0D0E0D;">Quick view</button>
+              </div>
+            </div>
+            <div onClick="{{ p.open }}" style="cursor:pointer;display:flex;flex-direction:column;gap:3px;">
+              <div style="font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:#9A9C96;">{{ p.style }} · {{ p.strap }}</div>
+              <span style="font-family:'Cormorant Garamond',serif;font-size:clamp(21px,2vw,25px);line-height:1.15;">{{ p.name }}</span>
+              <span style="font-size:13px;letter-spacing:.04em;color:#C9C6BF;">{{ p.priceF }}</span>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+</sc-if>
+
+<!-- PRODUCT -->
+<sc-if value="{{ isProduct }}" hint-placeholder-val="{{ false }}">
+  <section style="padding:clamp(20px,3vw,40px) clamp(20px,5vw,64px) clamp(64px,8vw,110px);">
+    <div style="max-width:1320px;margin:0 auto;display:flex;flex-direction:column;gap:24px;">
+      <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#9A9C96;display:flex;gap:10px;">
+        <a href="#" onClick="{{ goCollection }}" style="color:#9A9C96;">Collection</a><span>/</span><span style="color:#ECE9E2;">{{ cur.name }}</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:clamp(32px,5vw,80px);align-items:start;">
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div onMouseMove="{{ zoomMove }}" onMouseLeave="{{ zoomOut }}" style="position:relative;aspect-ratio:1/1;overflow:hidden;background:radial-gradient(ellipse at 50% 40%, #2A2E28 0%, #141614 60%, #0D0E0D 100%);cursor:zoom-in;">
+            <div style="position:absolute;inset:0;transform:scale({{ zScale }});transform-origin:{{ zOrigin }};transition:transform .35s ease;">
+              <sc-for list="{{ gallery }}" as="g" hint-placeholder-count="1">
+                <div style="position:absolute;inset:0;opacity:{{ g.op }};pointer-events:{{ g.pe }};transition:opacity .4s ease;">
+                  <img src="{{ g.src }}" alt="{{ cur.name }} — {{ g.label }}" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;;object-fit:cover;display:block;">
+                </div>
+              </sc-for>
+            </div>
+            <sc-if value="{{ desk }}" hint-placeholder-val="{{ true }}">
+              <span style="position:absolute;right:14px;bottom:12px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#9A9C96;pointer-events:none;">Hover to zoom</span>
+            </sc-if>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;">
+            <sc-for list="{{ gallery }}" as="g" hint-placeholder-count="4">
+              <button onClick="{{ g.pick }}" aria-label="{{ g.label }}" style="position:relative;aspect-ratio:1/1;padding:0;cursor:pointer;background:#141614;border:1px solid {{ g.bd }};overflow:hidden;">
+                <img src="{{ g.src }}" alt="{{ g.label }}" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;font-size:10px;;object-fit:cover;display:block;">
+              </button>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:28px;">
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div style="font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#B89B67;">{{ cur.style }}</div>
+            <h1 style="margin:0;font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(42px,5vw,68px);line-height:1;">{{ cur.name }}</h1>
+            <div style="font-size:20px;letter-spacing:.04em;">{{ cur.priceF }}</div>
+            <p style="margin:0;color:#B4B2AB;font-size:15px;max-width:46ch;text-wrap:pretty;">{{ cur.desc }}</p>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div style="display:flex;justify-content:space-between;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#9A9C96;"><span>Strap</span><span style="color:#ECE9E2;letter-spacing:.08em;text-transform:none;font-size:13px;">{{ curStrap }}</span></div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;">
+              <sc-for list="{{ strapChips }}" as="c" hint-placeholder-count="3">
+                <button onClick="{{ c.pick }}" style="background:{{ c.bg }};color:{{ c.fg }};border:1px solid {{ c.bd }};padding:11px 16px;font-size:13px;cursor:pointer;transition:all .2s;">{{ c.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <button onClick="{{ addCur }}" style="background:#ECE9E2;color:#0D0E0D;border:0;padding:18px;font-size:12px;font-weight:400;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;" style-hover="background:#FFFFFF;">Add to cart</button>
+            <a href="{{ waCur }}" target="_blank" style="display:flex;justify-content:center;align-items:center;gap:10px;background:#3E5A37;color:#ECE9E2;padding:18px;font-size:12px;font-weight:400;letter-spacing:.22em;text-transform:uppercase;" style-hover="background:#4A6A42;color:#ECE9E2;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.5-1.2A9 9 0 1 0 12 3z"></path><path d="M9 8.5c0 3.5 3 6.5 6.5 6.5l1-1.5-2-1-1 .8c-1-.5-2.3-1.8-2.8-2.8l.8-1-1-2-1.5 1z"></path></svg>Order on WhatsApp</a>
+          </div>
+          <div style="display:flex;flex-direction:column;border-top:1px solid rgba(236,233,226,.1);">
+            <sc-for list="{{ assurances }}" as="a" hint-placeholder-count="3">
+              <div style="display:grid;grid-template-columns:120px 1fr;gap:16px;padding:16px 0;border-bottom:1px solid rgba(236,233,226,.1);font-size:14px;">
+                <span style="font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#B89B67;padding-top:2px;">{{ a.k }}</span>
+                <span style="color:#C9C6BF;">{{ a.v }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:26px;margin-bottom:6px;">Specifications</div>
+            <sc-for list="{{ specs }}" as="s" hint-placeholder-count="6">
+              <div style="display:flex;justify-content:space-between;gap:16px;padding:10px 0;border-bottom:1px solid rgba(236,233,226,.07);font-size:14px;">
+                <span style="color:#9A9C96;">{{ s.k }}</span><span style="text-align:right;">{{ s.v }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section style="padding:clamp(56px,8vw,110px) 0 clamp(80px,10vw,140px);background:#111311;">
+    <div style="max-width:1320px;margin:0 auto 36px;padding:0 clamp(20px,5vw,64px);">
+      <h2 style="margin:0;font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(32px,4vw,52px);">You may also like</h2>
+    </div>
+    <div style="max-width:1320px;margin:0 auto;padding:0 clamp(20px,5vw,64px);display:flex;gap:clamp(16px,2vw,28px);overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding:0 clamp(20px,5vw,64px);scrollbar-width:none;">
+      <sc-for list="{{ related }}" as="p" hint-placeholder-count="3">
+        <div data-reveal="" onClick="{{ p.open }}" style="flex:1 0 min(70vw,280px);scroll-snap-align:start;display:flex;flex-direction:column;gap:14px;cursor:pointer;">
+          <div style="position:relative;aspect-ratio:4/5;overflow:hidden;background:radial-gradient(ellipse at 50% 38%, #272A26 0%, #131513 62%, #0D0E0D 100%);">
+            <img src="{{ p.img }}" alt="{{ p.name }}" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;;object-fit:cover;display:block;">
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;">
+            <span style="font-family:'Cormorant Garamond',serif;font-size:24px;">{{ p.name }}</span>
+            <span style="font-size:13px;color:#C9C6BF;white-space:nowrap;">{{ p.priceF }}</span>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+  <sc-if value="{{ mob }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;left:0;right:0;bottom:0;z-index:30;background:rgba(13,14,13,.94);backdrop-filter:blur(12px);border-top:1px solid rgba(236,233,226,.1);padding:10px 16px calc(10px + env(safe-area-inset-bottom));display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <button onClick="{{ addCur }}" style="background:#ECE9E2;color:#0D0E0D;border:0;padding:15px 8px;font-size:11px;font-weight:400;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;">Add · {{ cur.priceShort }}</button>
+      <a href="{{ waCur }}" target="_blank" style="display:flex;justify-content:center;align-items:center;background:#3E5A37;color:#ECE9E2;padding:15px 8px;font-size:11px;font-weight:400;letter-spacing:.18em;text-transform:uppercase;">WhatsApp</a>
+    </div>
+  </sc-if>
+</sc-if>
+
+<!-- ABOUT -->
+<sc-if value="{{ isAbout }}" hint-placeholder-val="{{ false }}">
+  <section style="padding:clamp(64px,10vw,140px) clamp(20px,5vw,64px) clamp(48px,6vw,80px);">
+    <div style="max-width:1100px;margin:0 auto;display:flex;flex-direction:column;gap:28px;">
+      <div style="font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#B89B67;">About Ash &amp; Moss</div>
+      <h1 data-reveal="" style="margin:0;font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(48px,8vw,112px);line-height:.95;max-width:12ch;text-wrap:balance;">Made slowly, in Pokhara.</h1>
+    </div>
+  </section>
+  <section style="padding:0 clamp(20px,5vw,64px);">
+    <div data-reveal="" style="max-width:1320px;margin:0 auto;position:relative;aspect-ratio:16/8;min-height:320px;overflow:hidden;background:linear-gradient(160deg,#1E211D 0%,#0F110F 100%);">
+      <img src="images/story.jpeg" alt="Phewa Lake / workshop, wide" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;;object-fit:cover;display:block;">
+    </div>
+  </section>
+  <section style="padding:clamp(64px,9vw,130px) clamp(20px,5vw,64px);">
+    <div style="max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:clamp(32px,6vw,96px);">
+      <h2 data-reveal="" style="margin:0;font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(32px,4vw,52px);line-height:1.05;">A watch should outlast the season it was bought in.</h2>
+      <div data-reveal="" style="display:flex;flex-direction:column;gap:20px;color:#B4B2AB;font-size:16px;text-wrap:pretty;">
+        <p style="margin:0;">Ash &amp; Moss started in a small room on New Road with a simple idea: make a watch in Nepal that holds its own next to anything on a wrist in Zurich or Tokyo, and price it honestly.</p>
+        <p style="margin:0;">The name comes from what surrounds us. Ash for the grey stone and morning mist over Phewa. Moss for the green that covers the hills after the monsoon. Both are quiet, both last.</p>
+        <p style="margin:0;">Each piece is assembled, checked and finished by hand in Pokhara, then delivered to your door anywhere in Nepal.</p>
+      </div>
+    </div>
+  </section>
+  <section style="padding:clamp(64px,9vw,130px) clamp(20px,5vw,64px);background:#111311;">
+    <div style="max-width:1320px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:clamp(32px,4vw,56px);">
+      <sc-for list="{{ values }}" as="v" hint-placeholder-count="3">
+        <div data-reveal="" style="display:flex;flex-direction:column;gap:14px;padding-top:24px;border-top:1px solid rgba(236,233,226,.14);">
+          <span style="font-family:'Cormorant Garamond',serif;font-style:italic;color:#B89B67;font-size:20px;">{{ v.n }}</span>
+          <span style="font-family:'Cormorant Garamond',serif;font-size:32px;line-height:1.1;">{{ v.title }}</span>
+          <span style="color:#9A9C96;max-width:36ch;">{{ v.copy }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+  <section style="padding:clamp(80px,10vw,140px) clamp(20px,5vw,64px);text-align:center;">
+    <div style="display:flex;flex-direction:column;gap:28px;align-items:center;">
+      <h2 style="margin:0;font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(38px,5vw,64px);">Timeless, by nature.</h2>
+      <button onClick="{{ goCollection }}" style="background:#ECE9E2;color:#0D0E0D;border:0;padding:17px 30px;font-size:12px;font-weight:400;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;">Explore the collection</button>
+    </div>
+  </section>
+</sc-if>
+
+<!-- CONTACT -->
+<sc-if value="{{ isContact }}" hint-placeholder-val="{{ false }}">
+  <section style="padding:clamp(56px,9vw,130px) clamp(20px,5vw,64px) clamp(64px,8vw,110px);">
+    <div style="max-width:1320px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:clamp(48px,7vw,110px);">
+      <div style="display:flex;flex-direction:column;gap:32px;">
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div style="font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#B89B67;">Contact</div>
+          <h1 style="margin:0;font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(46px,7vw,88px);line-height:.95;">Come by, or write.</h1>
+          <p style="margin:0;color:#B4B2AB;max-width:40ch;">The fastest way to reach us is WhatsApp. We reply within the day, usually within the hour.</p>
+        </div>
+        <a href="{{ waGeneral }}" target="_blank" style="display:flex;justify-content:space-between;align-items:center;gap:16px;background:#3E5A37;color:#ECE9E2;padding:22px 24px;" style-hover="background:#4A6A42;color:#ECE9E2;">
+          <span style="display:flex;flex-direction:column;gap:2px;"><span style="font-size:11px;letter-spacing:.22em;text-transform:uppercase;opacity:.85;">WhatsApp</span><span style="font-family:'Cormorant Garamond',serif;font-size:26px;">{{ waDisplay }}</span></span>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+        </a>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:24px;">
+          <div style="display:flex;flex-direction:column;gap:6px;"><span style="font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#9A9C96;">Showroom</span><span>08 New Rd<br>Pokhara, Nepal</span></div>
+          <div style="display:flex;flex-direction:column;gap:6px;"><span style="font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#9A9C96;">Email</span><a href="mailto:hello@ashandmoss.com">hello@ashandmoss.com</a></div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:20px;">
+        <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
+          <form onSubmit="{{ submitForm }}" style="display:flex;flex-direction:column;gap:20px;">
+            <label style="display:flex;flex-direction:column;gap:8px;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#9A9C96;">Name<input required="" style="background:transparent;border:0;border-bottom:1px solid rgba(236,233,226,.25);color:#ECE9E2;padding:12px 0;font-size:16px;font-weight:300;outline:none;letter-spacing:0;" style-focus="border-bottom-color:#B89B67;"></label>
+            <label style="display:flex;flex-direction:column;gap:8px;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#9A9C96;">Phone<input type="tel" style="background:transparent;border:0;border-bottom:1px solid rgba(236,233,226,.25);color:#ECE9E2;padding:12px 0;font-size:16px;font-weight:300;outline:none;letter-spacing:0;" style-focus="border-bottom-color:#B89B67;"></label>
+            <label style="display:flex;flex-direction:column;gap:8px;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#9A9C96;">Message<textarea rows="4" required="" style="background:transparent;border:0;border-bottom:1px solid rgba(236,233,226,.25);color:#ECE9E2;padding:12px 0;font-size:16px;font-weight:300;outline:none;resize:vertical;letter-spacing:0;" style-focus="border-bottom-color:#B89B67;"></textarea></label>
+            <button type="submit" style="align-self:flex-start;background:#ECE9E2;color:#0D0E0D;border:0;padding:17px 34px;font-size:12px;font-weight:400;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;margin-top:8px;">Send message</button>
+          </form>
+        </sc-if>
+        <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:40px 0;display:flex;flex-direction:column;gap:10px;">
+            <span style="font-family:'Cormorant Garamond',serif;font-size:36px;">Thank you.</span>
+            <span style="color:#B4B2AB;">We’ve received your message and will reply soon.</span>
+          </div>
+        </sc-if>
+        <div style="position:relative;aspect-ratio:4/3;overflow:hidden;background:#151715;margin-top:12px;">
+          <iframe title="Map" src="https://maps.google.com/maps?q=New%20Road%2C%20Pokhara%2C%20Nepal&amp;z=15&amp;output=embed" style="position:absolute;inset:0;width:100%;height:100%;border:0;filter:grayscale(1) invert(.9) contrast(.85) brightness(.95);" loading="lazy"></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+</sc-if>
+</main>
+
+<footer style="background:#090A09;border-top:1px solid rgba(236,233,226,.07);padding:clamp(56px,8vw,96px) clamp(20px,5vw,64px) calc(32px + {{ footPad }});">
+  <div style="max-width:1320px;margin:0 auto;display:flex;flex-direction:column;gap:56px;">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:40px;">
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <span style="font-family:'Cormorant Garamond',serif;font-size:30px;">Ash <span style="font-style:italic;color:#B89B67;">&amp;</span> Moss</span>
+        <span style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:19px;color:#9A9C96;">Timeless, by nature.</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;">
+        <span style="font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#9A9C96;margin-bottom:4px;">Visit</span>
+        <span>08 New Rd, Pokhara</span>
+        <a href="mailto:hello@ashandmoss.com">hello@ashandmoss.com</a>
+        <a href="{{ waGeneral }}" target="_blank">WhatsApp {{ waDisplay }}</a>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;">
+        <span style="font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#9A9C96;margin-bottom:4px;">Shop</span>
+        <a href="#" onClick="{{ goCollection }}">Collection</a>
+        <a href="#" onClick="{{ goAbout }}">About</a>
+        <a href="#" onClick="{{ goContact }}">Contact</a>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;">
+        <span style="font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#9A9C96;margin-bottom:4px;">Follow</span>
+        <a href="https://instagram.com/ashandmoss" target="_blank">Instagram</a>
+        <a href="https://www.tiktok.com/@ashandmoss" target="_blank">TikTok</a>
+        <a href="https://facebook.com/ashandmoss" target="_blank">Facebook</a>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;padding-top:24px;border-top:1px solid rgba(236,233,226,.08);font-size:12px;color:#9A9C96;">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <span style="border:1px solid rgba(236,233,226,.16);padding:6px 12px;letter-spacing:.08em;">eSewa</span>
+        <span style="border:1px solid rgba(236,233,226,.16);padding:6px 12px;letter-spacing:.08em;">Khalti</span>
+        <span style="border:1px solid rgba(236,233,226,.16);padding:6px 12px;letter-spacing:.08em;">Cash on Delivery</span>
+      </div>
+      <span>Delivery all over Nepal · © 2026 Ash &amp; Moss · A Basilpot Original 🌿</span>
+    </div>
+  </div>
+</footer>
+
+<sc-if value="{{ showFab }}" hint-placeholder-val="{{ true }}">
+  <a href="{{ waGeneral }}" target="_blank" rel="noopener" aria-label="Order on WhatsApp" class="fabpulse" style="position:fixed;right:clamp(16px,3vw,32px);bottom:calc(clamp(16px,3vw,32px) + env(safe-area-inset-bottom));z-index:35;display:flex;align-items:center;gap:10px;background:#25D366;color:#0A0F0A;height:60px;padding:0 24px;border-radius:30px;animation:fabpulse 2.8s ease-out infinite;font-weight:500;font-size:11px;letter-spacing:.18em;text-transform:uppercase;" style-hover="background:#4BE57F;color:#0A0F0A;transform:scale(1.04);">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.5-1.2A9 9 0 1 0 12 3z"></path><path d="M9 8.5c0 3.5 3 6.5 6.5 6.5l1-1.5-2-1-1 .8c-1-.5-2.3-1.8-2.8-2.8l.8-1-1-2-1.5 1z"></path></svg>
+    <span>Order on WhatsApp</span>
+  </a>
+</sc-if>
+
+<sc-if value="{{ hasQuick }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closeQuick }}" style="position:fixed;inset:0;z-index:70;background:rgba(5,6,5,.78);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:clamp(0px,3vw,40px);">
+    <div onClick="{{ stop }}" style="position:relative;width:100%;max-width:960px;max-height:100%;overflow:auto;background:#131513;border:1px solid rgba(236,233,226,.08);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));">
+      <div style="position:relative;aspect-ratio:1/1;background:radial-gradient(ellipse at 50% 40%, #2A2E28 0%, #141614 60%, #0D0E0D 100%);">
+        <img src="{{ qp.img }}" alt="{{ qp.name }}" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;;object-fit:cover;display:block;">
+      </div>
+      <div style="padding:clamp(24px,4vw,44px);display:flex;flex-direction:column;gap:20px;">
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#B89B67;">{{ qp.style }}</div>
+          <span style="font-family:'Cormorant Garamond',serif;font-weight:300;font-size:42px;line-height:1;">{{ qp.name }}</span>
+          <span style="font-size:17px;">{{ qp.priceF }}</span>
+          <p style="margin:6px 0 0;color:#B4B2AB;font-size:14px;">{{ qp.desc }}</p>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+          <sc-for list="{{ qStrapChips }}" as="c" hint-placeholder-count="3">
+            <button onClick="{{ c.pick }}" style="background:{{ c.bg }};color:{{ c.fg }};border:1px solid {{ c.bd }};padding:10px 14px;font-size:13px;cursor:pointer;">{{ c.label }}</button>
+          </sc-for>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:auto;">
+          <button onClick="{{ addQuick }}" style="background:#ECE9E2;color:#0D0E0D;border:0;padding:16px;font-size:12px;font-weight:400;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;">Add to cart</button>
+          <a href="{{ waQuick }}" target="_blank" style="display:flex;justify-content:center;background:#3E5A37;color:#ECE9E2;padding:16px;font-size:12px;font-weight:400;letter-spacing:.22em;text-transform:uppercase;">Order on WhatsApp</a>
+          <button onClick="{{ quickDetails }}" style="background:none;border:0;color:#C9C6BF;padding:10px;font-size:12px;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;text-decoration:underline;text-underline-offset:4px;">Full details</button>
+        </div>
+      </div>
+      <button onClick="{{ closeQuick }}" aria-label="Close" style="position:absolute;top:10px;right:10px;background:rgba(13,14,13,.7);border:0;color:#ECE9E2;width:44px;height:44px;display:flex;align-items:center;justify-content:center;cursor:pointer;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M5 5l14 14M19 5L5 19"></path></svg></button>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ cartOpen }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closeCart }}" style="position:fixed;inset:0;z-index:80;background:rgba(5,6,5,.7);backdrop-filter:blur(4px);">
+    <aside onClick="{{ stop }}" style="position:absolute;top:0;right:0;bottom:0;width:min(100%,440px);background:#121412;border-left:1px solid rgba(236,233,226,.08);display:flex;flex-direction:column;">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:18px 24px;border-bottom:1px solid rgba(236,233,226,.08);">
+        <span style="font-family:'Cormorant Garamond',serif;font-size:28px;">Your cart</span>
+        <button onClick="{{ closeCart }}" aria-label="Close" style="background:none;border:0;color:#ECE9E2;width:44px;height:44px;margin-right:-12px;display:flex;align-items:center;justify-content:center;cursor:pointer;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M5 5l14 14M19 5L5 19"></path></svg></button>
+      </div>
+      <sc-if value="{{ placed }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:14px;padding:32px;">
+          <span style="font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:300;">Order received.</span>
+          <span style="color:#B4B2AB;max-width:30ch;">We’ll call you to confirm delivery. Payment: {{ pay }}.</span>
+          <button onClick="{{ closeCart }}" style="margin-top:12px;background:none;border:1px solid rgba(236,233,226,.3);color:#ECE9E2;padding:14px 24px;font-size:12px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;">Continue browsing</button>
+        </div>
+      </sc-if>
+      <sc-if value="{{ cartEmpty }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:16px;padding:32px;text-align:center;">
+          <span style="font-family:'Cormorant Garamond',serif;font-size:30px;">Your cart is empty.</span>
+          <button onClick="{{ goCollection }}" style="background:#ECE9E2;color:#0D0E0D;border:0;padding:15px 26px;font-size:12px;font-weight:400;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;">Explore the collection</button>
+        </div>
+      </sc-if>
+      <sc-if value="{{ cartHas }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1;overflow:auto;padding:8px 24px;">
+          <sc-for list="{{ cartItems }}" as="it" hint-placeholder-count="1">
+            <div style="display:grid;grid-template-columns:84px 1fr;gap:16px;padding:18px 0;border-bottom:1px solid rgba(236,233,226,.07);">
+              <div style="position:relative;aspect-ratio:1/1;background:#1A1C19;overflow:hidden;">
+                <img src="{{ it.img }}" alt="Ash & Moss" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;;object-fit:cover;display:block;">
+              </div>
+              <div style="display:flex;flex-direction:column;gap:4px;">
+                <div style="display:flex;justify-content:space-between;gap:10px;"><span style="font-family:'Cormorant Garamond',serif;font-size:21px;line-height:1.1;">{{ it.name }}</span><span style="font-size:13px;white-space:nowrap;">{{ it.lineF }}</span></div>
+                <span style="font-size:12px;color:#9A9C96;">{{ it.strapName }}</span>
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;">
+                  <div style="display:flex;align-items:center;border:1px solid rgba(236,233,226,.16);">
+                    <button onClick="{{ it.dec }}" style="background:none;border:0;color:#ECE9E2;width:36px;height:36px;cursor:pointer;font-size:16px;">−</button>
+                    <span style="width:24px;text-align:center;font-size:13px;">{{ it.qty }}</span>
+                    <button onClick="{{ it.inc }}" style="background:none;border:0;color:#ECE9E2;width:36px;height:36px;cursor:pointer;font-size:16px;">+</button>
+                  </div>
+                  <button onClick="{{ it.remove }}" style="background:none;border:0;color:#9A9C96;font-size:12px;cursor:pointer;text-decoration:underline;text-underline-offset:3px;">Remove</button>
+                </div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="padding:20px 24px calc(20px + env(safe-area-inset-bottom));border-top:1px solid rgba(236,233,226,.08);display:flex;flex-direction:column;gap:16px;background:#0F110F;">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;"><span style="font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#9A9C96;">Subtotal</span><span style="font-size:18px;">{{ subtotalF }}</span></div>
+          <div style="font-size:12px;color:#9A9C96;">Delivery all over Nepal. Charges confirmed by phone.</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <span style="font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#9A9C96;">Pay with</span>
+            <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;">
+              <sc-for list="{{ payChips }}" as="c" hint-placeholder-count="3">
+                <button onClick="{{ c.pick }}" style="background:{{ c.bg }};color:{{ c.fg }};border:1px solid {{ c.bd }};padding:12px 4px;font-size:12px;cursor:pointer;">{{ c.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+          <button onClick="{{ placeOrder }}" style="background:#ECE9E2;color:#0D0E0D;border:0;padding:17px;font-size:12px;font-weight:400;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;">Place order</button>
+          <a href="{{ waCart }}" target="_blank" style="display:flex;justify-content:center;background:#3E5A37;color:#ECE9E2;padding:15px;font-size:12px;font-weight:400;letter-spacing:.22em;text-transform:uppercase;">Or order on WhatsApp</a>
+        </div>
+      </sc-if>
+    </aside>
+  </div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;whatsapp&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;9779847765308&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Store&quot;},&quot;announcement&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Layout&quot;},&quot;reveal&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Layout&quot;}}">
+const W = [
+  { id: 1, name: 'Fewa 40', style: 'Classic', strap: 'Leather', price: 28500, straps: ['Moss leather', 'Black leather', 'Steel bracelet'],
+    desc: 'A dress watch with a sunray ash dial and slim polished case. Easy under a cuff, clear at a glance.',
+    case: '40 mm, 316L steel, 10.5 mm thick', mov: 'Miyota 8215 automatic, 42 h reserve', wr: '50 m', mat: 'Italian calf leather, quick-release' },
+  { id: 2, name: 'Sarangkot', style: 'Minimal', strap: 'Leather', price: 18900, straps: ['Ash suede', 'Black leather'],
+    desc: 'Two hands, no numerals, nothing extra. A matte charcoal dial named for the hill above the lake.',
+    case: '38 mm, brushed steel, 8.9 mm thick', mov: 'Seiko VD78 quartz', wr: '30 m', mat: 'Suede, quick-release' },
+  { id: 3, name: 'Annapurna Diver', style: 'Sport', strap: 'Steel', price: 42000, straps: ['Steel bracelet', 'Black rubber'],
+    desc: 'A 200 m diver with a moss ceramic bezel, lumed indices and a screw-down crown. Built for the lake and the trail.',
+    case: '41 mm, 316L steel, 12.8 mm thick', mov: 'Seiko NH35 automatic, 41 h reserve', wr: '200 m', mat: 'Solid-link steel bracelet' },
+  { id: 4, name: 'Seti Field', style: 'Sport', strap: 'Nylon', price: 24500, straps: ['Olive nylon', 'Ash nylon', 'Black leather'],
+    desc: 'A legible field watch with a bead-blasted case and full lume. Light on the wrist, tough enough for anything.',
+    case: '39 mm, bead-blasted steel', mov: 'Seiko NH35 automatic, 41 h reserve', wr: '100 m', mat: 'Woven nylon, quick-release' },
+  { id: 5, name: 'Begnas Slim', style: 'Minimal', strap: 'Steel', price: 21500, straps: ['Steel mesh', 'Black leather'],
+    desc: 'Our thinnest watch, with a soft off-white dial and a fine mesh bracelet. Made for every day.',
+    case: '36 mm, polished steel, 7.4 mm thick', mov: 'Ronda 762 quartz', wr: '30 m', mat: 'Milanese steel mesh' },
+  { id: 6, name: 'Machhapuchhre GMT', style: 'Classic', strap: 'Steel', price: 48500, straps: ['Steel bracelet', 'Moss leather'],
+    desc: 'A second time zone in muted gold and charcoal, for the ones who travel and the ones they call home.',
+    case: '40 mm, 316L steel, 12 mm thick', mov: 'Seiko NH34 GMT automatic', wr: '100 m', mat: 'Steel bracelet with micro-adjust' },
+];
+const IMG = k => `images/watch-${((k - 1) % 8) + 1}.jpeg`;
+const fmt = n => 'NPR ' + n.toLocaleString('en-IN');
+const PRICES = { 'All': () => true, 'Under 25,000': p => p < 25000, '25,000 – 40,000': p => p >= 25000 && p <= 40000, '40,000+': p => p > 40000 };
+const on = { bg: '#ECE9E2', fg: '#0D0E0D', bd: '#ECE9E2' };
+const off = { bg: 'transparent', fg: '#ECE9E2', bd: 'rgba(236,233,226,.2)' };
+
+class Component extends DCLogic {
+  state = { page: 'home', pid: 1, cart: [], cartOpen: false, menuOpen: false, quick: null, qStrap: 0,
+    fStyle: 'All', fPrice: 'All', fStrap: 'All', gi: 0, strap: 0, zOn: false, zx: 50, zy: 50,
+    w: typeof window !== 'undefined' ? window.innerWidth : 1200, pay: 'eSewa', placed: false, sent: false };
+
+  componentDidMount() {
+    this.onR = () => this.setState({ w: window.innerWidth });
+    window.addEventListener('resize', this.onR);
+    this.io = new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting) { e.target.style.opacity = 1; e.target.style.transform = 'none'; this.io.unobserve(e.target); }
+    }), { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    this.scan();
+  }
+  componentDidUpdate() { this.scan(); }
+  componentWillUnmount() { window.removeEventListener('resize', this.onR); this.io && this.io.disconnect(); }
+  scan() {
+    if (this.props.reveal === false || !this.io) return;
+    requestAnimationFrame(() => document.querySelectorAll('[data-reveal]:not([data-rv])').forEach(el => {
+      el.setAttribute('data-rv', '');
+      el.style.opacity = 0; el.style.transform = 'translateY(16px)';
+      el.style.transition = 'opacity .9s cubic-bezier(.2,.6,.2,1), transform .9s cubic-bezier(.2,.6,.2,1)';
+      this.io.observe(el);
+    }));
+  }
+  go(page, extra = {}) {
+    this.setState({ page, menuOpen: false, quick: null, cartOpen: false, gi: 0, strap: 0, zOn: false, ...extra });
+    window.scrollTo(0, 0);
+  }
+  add(id, strap) {
+    this.setState(s => {
+      const cart = s.cart.map(c => ({ ...c }));
+      const ex = cart.find(c => c.id === id && c.strap === strap);
+      if (ex) ex.qty++; else cart.push({ id, strap, qty: 1 });
+      return { cart, cartOpen: true, quick: null, placed: false };
+    });
+  }
+  setQty(i, d) {
+    this.setState(s => ({ cart: s.cart.map((c, j) => j === i ? { ...c, qty: c.qty + d } : c).filter(c => c.qty > 0) }));
+  }
+
+  renderVals() {
+    const s = this.state, mob = s.w < 760;
+    const num = String(this.props.whatsapp ?? '9779847765308').replace(/\D/g, '');
+    const wa = t => `https://wa.me/${num}?text=${encodeURIComponent(t)}`;
+    const nav = p => e => { e && e.preventDefault && e.preventDefault(); this.go(p); };
+    const card = p => ({ ...p, img: IMG(p.id), priceF: fmt(p.price), priceShort: (p.price / 1000).toLocaleString('en-IN') + 'k',
+      open: () => this.go('product', { pid: p.id }), quick: e => { e.stopPropagation(); this.setState({ quick: p.id, qStrap: 0 }); } });
+    const chip = (label, active, pick) => ({ label, pick, ...(active ? on : off) });
+
+    const filtered = W.filter(p => (s.fStyle === 'All' || p.style === s.fStyle) && PRICES[s.fPrice](p.price) && (s.fStrap === 'All' || p.strap === s.fStrap)).map(card);
+    const group = (label, key, opts) => ({ label, chips: opts.map(o => chip(o, s[key] === o, () => this.setState({ [key]: o }))) });
+
+    const cur = card(W.find(p => p.id === s.pid) || W[0]);
+    const curStrap = cur.straps[s.strap] || cur.straps[0];
+    const qp = s.quick ? card(W.find(p => p.id === s.quick)) : null;
+
+    const cartItems = s.cart.map((c, i) => {
+      const p = W.find(x => x.id === c.id);
+      return { id: p.id, img: IMG(p.id), name: p.name, strapName: p.straps[c.strap], qty: c.qty, lineF: fmt(p.price * c.qty),
+        inc: () => this.setQty(i, 1), dec: () => this.setQty(i, -1), remove: () => this.setQty(i, -c.qty) };
+    });
+    const subtotal = s.cart.reduce((a, c) => a + W.find(x => x.id === c.id).price * c.qty, 0);
+    const cartCount = s.cart.reduce((a, c) => a + c.qty, 0);
+
+    return {
+      showAnn: this.props.announcement ?? true,
+      mob, desk: !mob,
+      isHome: s.page === 'home', isCollection: s.page === 'collection', isProduct: s.page === 'product',
+      isAbout: s.page === 'about', isContact: s.page === 'contact',
+      goHome: nav('home'), goCollection: nav('collection'), goAbout: nav('about'), goContact: nav('contact'),
+      menuOpen: s.menuOpen, openMenu: () => this.setState({ menuOpen: true }), closeMenu: () => this.setState({ menuOpen: false }),
+      cartOpen: s.cartOpen, openCart: () => this.setState({ cartOpen: true, placed: false }), closeCart: () => this.setState({ cartOpen: false }),
+      stop: e => e.stopPropagation(),
+      cartCount,
+      waGeneral: wa('Hello Ash & Moss, I would like to order a watch.'),
+      waDisplay: '+' + num.replace(/^(\d{3})(\d{3})(\d+)$/, '$1 $2 $3'),
+      waCur: wa(`Hello Ash & Moss, I'd like to order the ${cur.name} (${curStrap}) – ${cur.priceF}.`),
+      showFab: !(mob && s.page === 'product') && !s.cartOpen && !s.quick && !s.menuOpen,
+      footPad: mob && s.page === 'product' ? '72px' : '0px',
+      igCols: mob ? 'repeat(3,minmax(0,1fr))' : 'repeat(6,minmax(0,1fr))',
+      gridCols: mob ? 'repeat(2,minmax(0,1fr))' : 'repeat(auto-fill,minmax(260px,1fr))',
+
+      featured: W.slice(0, 4).map(card),
+      details: [
+        { key: 'dial', n: 'i.', title: 'The dial', copy: 'Sunray and matte finishes, applied indices, hands cut to catch low light.', ph: 'Dial close-up', src: 'images/detail-dial.webp' },
+        { key: 'case', n: 'ii.', title: 'The case', copy: '316L steel, brushed and polished by hand, sapphire crystal on top.', ph: 'Case profile close-up', src: 'images/detail-case.jpeg' },
+        { key: 'strap', n: 'iii.', title: 'The strap', copy: 'Leather, suede, nylon or steel. Quick-release, so you can change it in seconds.', ph: 'Strap / buckle close-up', src: 'images/detail-strap.jpeg' },
+      ],
+      moments: [
+        { key: 'boardroom', title: 'Boardroom', copy: 'Quiet authority.', style: 'Classic', ph: 'Lifestyle — boardroom', src: 'images/life-boardroom.jpeg', go: () => this.go('collection', { fStyle: 'Classic', fPrice: 'All', fStrap: 'All' }) },
+        { key: 'weekend', title: 'Weekend', copy: 'Lakeside, trail, road.', style: 'Sport', ph: 'Lifestyle — weekend outdoors', src: 'images/life-weekend.jpeg', go: () => this.go('collection', { fStyle: 'Sport', fPrice: 'All', fStrap: 'All' }) },
+        { key: 'night', title: 'Night', copy: 'Dinner and after.', style: 'Minimal', ph: 'Lifestyle — night out', src: 'images/life-night.jpeg', go: () => this.go('collection', { fStyle: 'Minimal', fPrice: 'All', fStrap: 'All' }) },
+      ],
+      reels: [
+        { key: 'promo', title: 'The Ash & Moss film', len: '0:45', ph: 'Promo video poster (9:16)', src: 'images/reel-1.jpeg' },
+        { key: 'r2', title: 'Made in Pokhara', len: '0:30', ph: 'Reel poster', src: 'images/reel-2.jpeg' },
+        { key: 'r3', title: 'Annapurna Diver at Phewa', len: '0:20', ph: 'Reel poster', src: 'images/reel-3.jpeg' },
+      ],
+      ig: [1, 2, 3, 4, 5, 6].map(i => `images/ig-${i}.png`),
+      values: [
+        { n: '01', title: 'Calm design', copy: 'Clean dials, balanced proportions, nothing that shouts.' },
+        { n: '02', title: 'Honest materials', copy: 'Steel, sapphire, reliable Japanese and Swiss movements. Listed plainly on every page.' },
+        { n: '03', title: 'Made to last', copy: 'A two-year warranty and servicing in Pokhara for as long as you own the watch.' },
+      ],
+
+      filterGroups: [
+        group('Style', 'fStyle', ['All', 'Classic', 'Sport', 'Minimal']),
+        group('Price', 'fPrice', Object.keys(PRICES)),
+        group('Strap', 'fStrap', ['All', 'Leather', 'Steel', 'Nylon']),
+      ],
+      filtered, noResults: filtered.length === 0,
+      resultLabel: `${filtered.length} ${filtered.length === 1 ? 'watch' : 'watches'}`,
+      clearFilters: () => this.setState({ fStyle: 'All', fPrice: 'All', fStrap: 'All' }),
+
+      cur, curStrap,
+      strapChips: cur.straps.map((t, i) => chip(t, i === s.strap, () => this.setState({ strap: i }))),
+      gallery: ['Front', 'Side', 'Caseback', 'On wrist'].map((label, i) => ({ n: i + 1, label, src: IMG(cur.id + i * 2),
+        op: i === s.gi ? 1 : 0, pe: i === s.gi ? 'auto' : 'none', bd: i === s.gi ? '#B89B67' : 'rgba(236,233,226,.1)',
+        pick: () => this.setState({ gi: i }) })),
+      zScale: s.zOn ? 1.9 : 1, zOrigin: `${s.zx}% ${s.zy}%`,
+      zoomMove: e => { if (mob) return; const r = e.currentTarget.getBoundingClientRect();
+        this.setState({ zOn: true, zx: ((e.clientX - r.left) / r.width) * 100, zy: ((e.clientY - r.top) / r.height) * 100 }); },
+      zoomOut: () => this.setState({ zOn: false }),
+      addCur: () => this.add(cur.id, s.strap),
+      specs: [
+        { k: 'Case size', v: cur.case }, { k: 'Movement', v: cur.mov }, { k: 'Water resistance', v: cur.wr },
+        { k: 'Strap material', v: cur.mat }, { k: 'Crystal', v: 'Sapphire, anti-reflective' }, { k: 'Strap options', v: cur.straps.join(', ') },
+      ],
+      assurances: [
+        { k: 'Delivery', v: 'All over Nepal. Same day in Pokhara, 2–4 days elsewhere.' },
+        { k: 'Payment', v: 'eSewa, Khalti or Cash on Delivery.' },
+        { k: 'Warranty', v: '2 years on movement and case. Servicing in Pokhara.' },
+      ],
+      related: W.filter(p => p.id !== cur.id).sort((a, b) => (b.style === cur.style) - (a.style === cur.style)).slice(0, 3).map(card),
+
+      hasQuick: !!qp, qp: qp || {},
+      qStrapChips: qp ? qp.straps.map((t, i) => chip(t, i === s.qStrap, () => this.setState({ qStrap: i }))) : [],
+      closeQuick: () => this.setState({ quick: null }),
+      addQuick: () => qp && this.add(qp.id, s.qStrap),
+      quickDetails: () => qp && this.go('product', { pid: qp.id, strap: s.qStrap }),
+      waQuick: qp ? wa(`Hello Ash & Moss, I'd like to order the ${qp.name} (${qp.straps[s.qStrap]}) – ${qp.priceF}.`) : '#',
+
+      cartItems, placed: s.placed, cartEmpty: !s.placed && s.cart.length === 0, cartHas: !s.placed && s.cart.length > 0,
+      subtotalF: fmt(subtotal), pay: s.pay,
+      payChips: ['eSewa', 'Khalti', 'Cash on Delivery'].map(p => ({ ...chip(p === 'Cash on Delivery' ? 'COD' : p, s.pay === p, () => this.setState({ pay: p })) })),
+      placeOrder: () => this.setState({ placed: true, cart: [] }),
+      waCart: wa('Hello Ash & Moss, I would like to order:\n' + cartItems.map(c => `• ${c.name} (${c.strapName}) × ${c.qty} – ${c.lineF}`).join('\n') + `\nTotal: ${fmt(subtotal)}`),
+
+      sent: s.sent, notSent: !s.sent,
+      submitForm: e => { e.preventDefault(); this.setState({ sent: true }); },
+    };
+  }
+}
+</script>
+</body>
+</html>
