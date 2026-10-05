@@ -79,7 +79,7 @@ input,textarea{font-family:inherit}
 <!-- HOME -->
 <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
   <section style="position:relative;min-height:calc(100svh - 64px);display:flex;align-items:flex-end;overflow:hidden;background:radial-gradient(ellipse 60% 70% at 62% 42%, #2A2E28 0%, #141614 55%, #0D0E0D 100%);">
-    <img src="images/hero.jpeg" alt="Hero — watch close-up, dramatic side light" loading="eager" style="position:absolute;inset:0;width:100%;height:100%;;object-fit:cover;display:block;">
+    <img src="images/hero.webp" alt="Hero — watch close-up, dramatic side light" loading="eager" style="position:absolute;inset:0;width:100%;height:100%;;object-fit:cover;display:block;">
     <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(to top, rgba(13,14,13,.92) 0%, rgba(13,14,13,.35) 40%, rgba(13,14,13,0) 70%);"></div>
     <div style="position:relative;pointer-events:none;width:100%;max-width:1320px;margin:0 auto;padding:0 clamp(20px,5vw,64px) clamp(48px,9vh,96px);display:flex;flex-direction:column;gap:28px;">
       <div style="font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#B89B67;">Pokhara, Nepal</div>
@@ -171,7 +171,7 @@ input,textarea{font-family:inherit}
   <section style="padding:clamp(64px,9vw,130px) clamp(20px,5vw,64px);background:#111311;">
     <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:clamp(40px,7vw,110px);align-items:center;">
       <div data-reveal="" style="position:relative;aspect-ratio:4/5;overflow:hidden;background:linear-gradient(160deg,#1E211D 0%,#0F110F 100%);">
-        <img src="images/story.jpeg" alt="Workshop in Pokhara" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;;object-fit:cover;display:block;">
+        <img src="images/story.webp" alt="Workshop in Pokhara" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;;object-fit:cover;display:block;">
       </div>
       <div data-reveal="" style="display:flex;flex-direction:column;gap:24px;">
         <div style="font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#B89B67;">Our story</div>
@@ -377,7 +377,7 @@ input,textarea{font-family:inherit}
   </section>
   <section style="padding:0 clamp(20px,5vw,64px);">
     <div data-reveal="" style="max-width:1320px;margin:0 auto;position:relative;aspect-ratio:16/8;min-height:320px;overflow:hidden;background:linear-gradient(160deg,#1E211D 0%,#0F110F 100%);">
-      <img src="images/story.jpeg" alt="Phewa Lake / workshop, wide" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;;object-fit:cover;display:block;">
+      <img src="images/story.webp" alt="Phewa Lake / workshop, wide" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;;object-fit:cover;display:block;">
     </div>
   </section>
   <section style="padding:clamp(64px,9vw,130px) clamp(20px,5vw,64px);">
@@ -608,7 +608,7 @@ const W = [
     desc: 'A second time zone in muted gold and charcoal, for the ones who travel and the ones they call home.',
     case: '40 mm, 316L steel, 12 mm thick', mov: 'Seiko NH34 GMT automatic', wr: '100 m', mat: 'Steel bracelet with micro-adjust' },
 ];
-const IMG = k => `images/watch-${((k - 1) % 8) + 1}.jpeg`;
+const IMG = k => `images/watch-${((k - 1) % 8) + 1}.webp`;
 const fmt = n => 'NPR ' + n.toLocaleString('en-IN');
 const PRICES = { 'All': () => true, 'Under 25,000': p => p < 25000, '25,000 – 40,000': p => p >= 25000 && p <= 40000, '40,000+': p => p > 40000 };
 const on = { bg: '#ECE9E2', fg: '#0D0E0D', bd: '#ECE9E2' };
@@ -699,20 +699,20 @@ class Component extends DCLogic {
       featured: W.slice(0, 4).map(card),
       details: [
         { key: 'dial', n: 'i.', title: 'The dial', copy: 'Sunray and matte finishes, applied indices, hands cut to catch low light.', ph: 'Dial close-up', src: 'images/detail-dial.webp' },
-        { key: 'case', n: 'ii.', title: 'The case', copy: '316L steel, brushed and polished by hand, sapphire crystal on top.', ph: 'Case profile close-up', src: 'images/detail-case.jpeg' },
-        { key: 'strap', n: 'iii.', title: 'The strap', copy: 'Leather, suede, nylon or steel. Quick-release, so you can change it in seconds.', ph: 'Strap / buckle close-up', src: 'images/detail-strap.jpeg' },
+        { key: 'case', n: 'ii.', title: 'The case', copy: '316L steel, brushed and polished by hand, sapphire crystal on top.', ph: 'Case profile close-up', src: 'images/detail-case.webp' },
+        { key: 'strap', n: 'iii.', title: 'The strap', copy: 'Leather, suede, nylon or steel. Quick-release, so you can change it in seconds.', ph: 'Strap / buckle close-up', src: 'images/detail-strap.webp' },
       ],
       moments: [
-        { key: 'boardroom', title: 'Boardroom', copy: 'Quiet authority.', style: 'Classic', ph: 'Lifestyle — boardroom', src: 'images/life-boardroom.jpeg', go: () => this.go('collection', { fStyle: 'Classic', fPrice: 'All', fStrap: 'All' }) },
-        { key: 'weekend', title: 'Weekend', copy: 'Lakeside, trail, road.', style: 'Sport', ph: 'Lifestyle — weekend outdoors', src: 'images/life-weekend.jpeg', go: () => this.go('collection', { fStyle: 'Sport', fPrice: 'All', fStrap: 'All' }) },
-        { key: 'night', title: 'Night', copy: 'Dinner and after.', style: 'Minimal', ph: 'Lifestyle — night out', src: 'images/life-night.jpeg', go: () => this.go('collection', { fStyle: 'Minimal', fPrice: 'All', fStrap: 'All' }) },
+        { key: 'boardroom', title: 'Boardroom', copy: 'Quiet authority.', style: 'Classic', ph: 'Lifestyle — boardroom', src: 'images/life-boardroom.webp', go: () => this.go('collection', { fStyle: 'Classic', fPrice: 'All', fStrap: 'All' }) },
+        { key: 'weekend', title: 'Weekend', copy: 'Lakeside, trail, road.', style: 'Sport', ph: 'Lifestyle — weekend outdoors', src: 'images/life-weekend.webp', go: () => this.go('collection', { fStyle: 'Sport', fPrice: 'All', fStrap: 'All' }) },
+        { key: 'night', title: 'Night', copy: 'Dinner and after.', style: 'Minimal', ph: 'Lifestyle — night out', src: 'images/life-night.webp', go: () => this.go('collection', { fStyle: 'Minimal', fPrice: 'All', fStrap: 'All' }) },
       ],
       reels: [
-        { key: 'promo', title: 'The Ash & Moss film', len: '0:45', ph: 'Promo video poster (9:16)', src: 'images/reel-1.jpeg' },
-        { key: 'r2', title: 'Made in Pokhara', len: '0:30', ph: 'Reel poster', src: 'images/reel-2.jpeg' },
-        { key: 'r3', title: 'Annapurna Diver at Phewa', len: '0:20', ph: 'Reel poster', src: 'images/reel-3.jpeg' },
+        { key: 'promo', title: 'The Ash & Moss film', len: '0:45', ph: 'Promo video poster (9:16)', src: 'images/reel-1.webp' },
+        { key: 'r2', title: 'Made in Pokhara', len: '0:30', ph: 'Reel poster', src: 'images/reel-2.webp' },
+        { key: 'r3', title: 'Annapurna Diver at Phewa', len: '0:20', ph: 'Reel poster', src: 'images/reel-3.webp' },
       ],
-      ig: [1, 2, 3, 4, 5, 6].map(i => `images/ig-${i}.png`),
+      ig: [1, 2, 3, 4, 5, 6].map(i => `images/ig-${i}.webp`),
       values: [
         { n: '01', title: 'Calm design', copy: 'Clean dials, balanced proportions, nothing that shouts.' },
         { n: '02', title: 'Honest materials', copy: 'Steel, sapphire, reliable Japanese and Swiss movements. Listed plainly on every page.' },
